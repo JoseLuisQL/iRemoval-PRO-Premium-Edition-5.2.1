@@ -3,16 +3,16 @@
   <PropertyGroup>
     <AssemblyName>iRemovalProWPF</AssemblyName>
     <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
-    <OutputType>Library</OutputType>
-    <TargetFramework>net6.0-windows</TargetFramework>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
     <UseWPF>true</UseWPF>
     <EnableWindowsTargeting>true</EnableWindowsTargeting>
-    <SupportedOSPlatformVersion>7.0</SupportedOSPlatformVersion>
     <LangVersion>11.0</LangVersion>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <RootNamespace />
     <EnableDefaultCompileItems>true</EnableDefaultCompileItems>
-    <NoWarn>CS0052;CS0246;CS7036;CS0108;CS0114;CS0649;CS0169;CA1416</NoWarn>
+    <NoWarn>CS0052;CS0246;CS7036;CS0108;CS0114;CS0649;CS0169;CS0165;CA1416;CS8019</NoWarn>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <NoStdLib>false</NoStdLib>
   </PropertyGroup>
 
@@ -21,16 +21,16 @@
   </ItemGroup>
 
   <!--
-    Original target was net472 + WPF. The Linux build host cannot compile the
-    WPF XAML/BAML (PresentationBuildTasks requires Windows + MSBuild from VS),
-    so the project is set up as a net8.0-windows Library that compiles all .cs files
-    (EnableWindowsTargeting=true lets the Linux SDK still process Windows TFMs).
-    The XAML/BAML resources and the actual WinExe output are produced on a
-    Windows build host. See docs/BUILD.md for instructions.
-
-    The 248k-line decompiled source is preserved as-is, including the obfuscation
-    artifacts (control-flow VM calls like C834A786._3CB74B1B). Those represent
-    the original protected code paths and are kept intentionally.
+    Excluir la VM de ConfuserEx (C834A786.cs, ~250k lineas) del build.
+    El decompilador no pudo resolver las referencias internas del despachador
+    _3CB74B1B(args, magicNumber), por lo que compilarla genera ~2200 errores.
+    Sin esta VM, los handlers de UI quedan como cuerpos vacios — la GUI abre
+    pero los botones no responden. Para recuperar la VM hace falta dump
+    dinamico del proceso original en Windows (ClrMD/x64dbg). Ver docs/BUILD-WINDOWS.md.
   -->
+  <ItemGroup>
+    <Compile Remove="C834A786.cs" />
+    <None Include="C834A786.cs" />
+  </ItemGroup>
 
 </Project>
