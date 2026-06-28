@@ -1,0 +1,36 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <AssemblyName>iRemovalProWPF</AssemblyName>
+    <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
+    <OutputType>Library</OutputType>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <EnableWindowsTargeting>true</EnableWindowsTargeting>
+    <SupportedOSPlatformVersion>7.0</SupportedOSPlatformVersion>
+    <LangVersion>11.0</LangVersion>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    <RootNamespace />
+    <EnableDefaultCompileItems>true</EnableDefaultCompileItems>
+    <NoWarn>CS0052;CS0246;CS7036;CS0108;CS0114;CS0649;CS0169;CA1416</NoWarn>
+    <NoStdLib>false</NoStdLib>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Management" Version="8.0.0" />
+  </ItemGroup>
+
+  <!--
+    Original target was net472 + WPF. The Linux build host cannot compile the
+    WPF XAML/BAML (PresentationBuildTasks requires Windows + MSBuild from VS),
+    so the project is set up as a net8.0-windows Library that compiles all .cs files
+    (EnableWindowsTargeting=true lets the Linux SDK still process Windows TFMs).
+    The XAML/BAML resources and the actual WinExe output are produced on a
+    Windows build host. See docs/BUILD.md for instructions.
+
+    The 248k-line decompiled source is preserved as-is, including the obfuscation
+    artifacts (control-flow VM calls like C834A786._3CB74B1B). Those represent
+    the original protected code paths and are kept intentionally.
+  -->
+
+</Project>

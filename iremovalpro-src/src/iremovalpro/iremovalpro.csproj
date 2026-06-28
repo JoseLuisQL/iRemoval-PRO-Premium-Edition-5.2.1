@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <AssemblyName>iremovalpro</AssemblyName>
+    <RootNamespace>iremovalpro</RootNamespace>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <FileVersion>1.0.0.0</FileVersion>
+    <Product>iremovalpro</Product>
+    <Description>Blackhound iRemovalPro Public build 0.7.1 @2022 — reverse-engineered skeleton</Description>
+  </PropertyGroup>
+
+  <!--
+    NOTE: The original iremovalpro.dll is published as .NET NativeAOT (x64).
+    Method bodies compiled to native x64 are stored in .RZ / .CJz sections (high-entropy),
+    encrypted/compressed and hydrated at runtime. They cannot be recovered statically from
+    the on-disk image. The C# skeletons below mirror the public API and types that survive
+    in the engine's strings, so the launcher can compile and the architecture is documented.
+    Full IL recovery requires dumping the running process in Windows with ClrMD/x64dbg.
+  -->
+
+</Project>

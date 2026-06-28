@@ -1,0 +1,24 @@
+# Build output — never commit
+**/bin/
+**/obj/
+
+# IDE / OS
+.vs/
+.idea/
+*.user
+*.suo
+.DS_Store
+Thumbs.db
+
+# NuGet
+*.nupkg
+*.snupkg
+.nuget/
+
+# Native AOT intermediate
+*.native.txt
+*.r2r.cache
+
+# Decompile temp
+decompiled/
+*.deobfuscated.dll
