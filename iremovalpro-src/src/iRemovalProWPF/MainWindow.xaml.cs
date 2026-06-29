@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Input;
 
@@ -99,16 +100,28 @@ namespace iRemovalProWPF
 
         // ===== Handlers conocidos (recuperados del original) =====
 
-        private void Button_Click_5(object sender, RoutedEventArgs e) => InvokeEngineAction(9, "checkra1n");
+        private void Button_Click_5(object sender, RoutedEventArgs e)
+        {
+            App.LogWrite(">>> Button_Click_5 (checkra1n) — calling Action(9)");
+            InvokeEngineAction(9, "checkra1n");
+        }
 
         private void Sn_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            if (e.LeftButton == MouseButtonState.Pressed) InvokeEngineAction(5, "sn");
+            if (e.LeftButton == MouseButtonState.Pressed)
+            {
+                App.LogWrite(">>> Sn_MouseDown — calling Action(5)");
+                InvokeEngineAction(5, "sn");
+            }
         }
 
         private void Imei_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            if (e.LeftButton == MouseButtonState.Pressed) InvokeEngineAction(6, "imei");
+            if (e.LeftButton == MouseButtonState.Pressed)
+            {
+                App.LogWrite(">>> Imei_MouseDown — calling Action(6)");
+                InvokeEngineAction(6, "imei");
+            }
         }
 
         // ===== Handlers stub (comportamiento real dentro de la VM de ConfuserEx) =====
@@ -152,22 +165,40 @@ namespace iRemovalProWPF
 
         private void InvokeEngineAction(int action, string label)
         {
+            App.LogWrite($"=== InvokeEngineAction START action={action} label={label} ===");
+
             if (!_engineAvailable)
             {
+                App.LogWrite("InvokeEngineAction: engine not available, returning");
                 UpdateStatus("iremovalpro.dll no cargada — copia el DLL original al lado del .exe.");
                 return;
             }
+
             try
             {
+                App.LogWrite($"InvokeEngineAction: about to call Library.Action({action})");
                 UpdateStatus($"Invocando engine action {action} ({label})...");
-                progress.Value = 10;
+                if (progress != null) progress.Value = 10;
+
+                // El log ya se flushea en App.LogWrite (File.AppendAllText).
+                // Si Library.Action crashea (AV nativo), el proceso muere pero
+                // la linea "about to call" ya esta en disco. Eso confirma que
+                // el crash es dentro del engine nativo, no en nuestro codigo.
+
                 Library.Action(action);
+
+                App.LogWrite($"InvokeEngineAction: Library.Action({action}) RETURNED OK");
                 UpdateStatus($"Engine action {action} invocada.");
             }
             catch (Exception ex)
             {
+                // En .NET 8, AccessViolationException nativo NO se captura aqui
+                // (el proceso muere). Pero otros tipos de excepcion si.
+                App.LogWrite($"InvokeEngineAction: {ex.GetType().Name} en Action({action}): {ex.Message}");
+                App.LogWrite(ex.StackTrace);
                 UpdateStatus($"Error en Action({action}): {ex.Message}");
             }
+            App.LogWrite($"=== InvokeEngineAction END action={action} ===");
         }
 
         private void UpdateStatus(string text)

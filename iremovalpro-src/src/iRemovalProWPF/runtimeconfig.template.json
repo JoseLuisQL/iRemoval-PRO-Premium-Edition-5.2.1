@@ -1,0 +1,7 @@
+{
+  "configProperties": {
+    "System.Runtime.TieredCompilation": false,
+    "System.GC.Concurrent": true,
+    "System.GC.Server": false
+  }
+}
