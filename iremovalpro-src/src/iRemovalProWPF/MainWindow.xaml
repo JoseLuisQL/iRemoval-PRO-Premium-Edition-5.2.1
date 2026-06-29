@@ -1,0 +1,122 @@
+<Window x:Class="iRemovalProWPF.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="iRemoval PRO Premium 5.2.1" Height="720" Width="980"
+        WindowStartupLocation="CenterScreen" Background="#FF1E1E1E" ResizeMode="CanMinimize">
+
+    <Grid Margin="12">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>     <!-- 0: topImage (logo) -->
+            <RowDefinition Height="Auto"/>     <!-- 1: checkrainButt -->
+            <RowDefinition Height="*"/>        <!-- 2: main content -->
+            <RowDefinition Height="Auto"/>     <!-- 3: progress -->
+            <RowDefinition Height="Auto"/>     <!-- 4: bottom buttons -->
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Row 0: topImage (logo) — connectionId 4 -->
+        <Image x:Name="topImage" Grid.Row="0" Grid.ColumnSpan="3" Height="80"
+               Stretch="Uniform" Margin="0,0,0,8"
+               MouseDown="TopImage_MouseDown" Cursor="Hand"/>
+
+        <!-- Row 1: checkrainButt — connectionId 1 -->
+        <Button x:Name="checkrainButt" Grid.Row="1" Grid.Column="0"
+                Content="checkra1n" Height="34" Margin="0,0,4,8"
+                Background="#FF007ACC" Foreground="White" FontWeight="Bold"
+                Click="Button_Click_5"/>
+
+        <!-- Button (left-middle) — connectionId 2 -->
+        <Button x:Name="leftButton" Grid.Row="1" Grid.Column="1"
+                Content="Jailbreak" Height="34" Margin="4,0,4,8"
+                Background="#FF2D2D30" Foreground="White"
+                Click="Button_Click"/>
+
+        <!-- Button (right) — connectionId 3 -->
+        <Button x:Name="rightButton" Grid.Row="1" Grid.Column="2"
+                Content="iRa1n" Height="34" Margin="4,0,0,8"
+                Background="#FF2D2D30" Foreground="White"
+                Click="Button_Click_1"/>
+
+        <!-- Row 2: main content area — three columns -->
+        <!-- Col 0: plugImage — connectionId 5 -->
+        <Image x:Name="plugImage" Grid.Row="2" Grid.Column="0"
+               Stretch="Uniform" Margin="0,8,4,8" VerticalAlignment="Center"/>
+
+        <!-- Col 1: iphoneImage — connectionId 6 -->
+        <Image x:Name="iphoneImage" Grid.Row="2" Grid.Column="1"
+               Stretch="Uniform" Margin="4,8,4,8" VerticalAlignment="Center"/>
+
+        <!-- Col 2: device info panel -->
+        <StackPanel Grid.Row="2" Grid.Column="2" Margin="4,8,0,8" VerticalAlignment="Center">
+
+            <!-- logoImage — connectionId 7 -->
+            <Image x:Name="logoImage" Height="48" Stretch="Uniform"
+                   HorizontalAlignment="Center" Margin="0,0,0,12"/>
+
+            <!-- model — connectionId 10 -->
+            <TextBlock Text="Model:" Foreground="#FFCCCCCC" Margin="0,2"/>
+            <Label x:Name="model" Content="—" Foreground="White" FontWeight="Bold" Margin="0,0,0,6"/>
+
+            <!-- ios — connectionId 11 -->
+            <TextBlock Text="iOS:" Foreground="#FFCCCCCC" Margin="0,2"/>
+            <Label x:Name="ios" Content="—" Foreground="White" FontWeight="Bold" Margin="0,0,0,6"/>
+
+            <!-- sn — connectionId 12 (clickable → Action 5) -->
+            <TextBlock Text="SN (click to copy):" Foreground="#FFCCCCCC" Margin="0,2"/>
+            <Label x:Name="sn" Content="—" Foreground="#FF4EC9B0" FontWeight="Bold"
+                   MouseDown="Sn_MouseDown" Cursor="Hand" Margin="0,0,0,6"/>
+
+            <!-- service — connectionId 13 -->
+            <TextBlock Text="Service:" Foreground="#FFCCCCCC" Margin="0,2"/>
+            <Label x:Name="service" Content="—" Foreground="White" FontWeight="Bold" Margin="0,0,0,6"/>
+
+            <!-- imei — connectionId 14 (clickable → Action 6) -->
+            <TextBlock Text="IMEI (click to copy):" Foreground="#FFCCCCCC" Margin="0,2"/>
+            <Label x:Name="imei" Content="—" Foreground="#FF4EC9B0" FontWeight="Bold"
+                   MouseDown="Imei_MouseDown" Cursor="Hand" Margin="0,0,0,6"/>
+        </StackPanel>
+
+        <!-- Row 3: progress bar — connectionId 8 -->
+        <ProgressBar x:Name="progress" Grid.Row="3" Grid.ColumnSpan="3"
+                     Height="22" Minimum="0" Maximum="100" Value="0"
+                     Margin="0,8,0,8"/>
+
+        <!-- Row 4: bottom action buttons -->
+        <Grid Grid.Row="4" Grid.ColumnSpan="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- activate — connectionId 9 -->
+            <Button x:Name="activate" Grid.Column="0" Content="Activate"
+                    Height="38" Margin="0,0,4,0" Background="#FF107C10"
+                    Foreground="White" FontWeight="Bold" Click="Activate_Click"/>
+
+            <!-- erase — connectionId 18 -->
+            <Button x:Name="erase" Grid.Column="1" Content="Erase"
+                    Height="38" Margin="4,0,4,0" Background="#FFB95C00"
+                    Foreground="White" FontWeight="Bold" Click="Erase_Click"/>
+
+            <!-- qrImage — connectionId 15 -->
+            <Border Grid.Column="2" Background="#FF2D2D30" Margin="4,0,4,0" Cursor="Hand"
+                    MouseDown="QrImage_MouseDown">
+                <Image x:Name="qrImage" Stretch="Uniform" Margin="2"/>
+            </Border>
+
+            <!-- scanText — connectionId 16 -->
+            <Label x:Name="scanText" Grid.Column="3" Content="Scan QR"
+                   Foreground="White" HorizontalContentAlignment="Center"
+                   VerticalContentAlignment="Center" Margin="4,0,0,0"/>
+
+            <!-- iphoneImage_Copy — connectionId 17 (overlay, kept for parity) -->
+            <Image x:Name="iphoneImage_Copy" Grid.Column="3" Visibility="Collapsed"/>
+        </Grid>
+    </Grid>
+</Window>

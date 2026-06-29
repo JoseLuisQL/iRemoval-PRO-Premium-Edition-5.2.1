@@ -9,28 +9,44 @@
     <EnableWindowsTargeting>true</EnableWindowsTargeting>
     <LangVersion>11.0</LangVersion>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
-    <RootNamespace />
-    <EnableDefaultCompileItems>true</EnableDefaultCompileItems>
+    <RootNamespace>iRemovalProWPF</RootNamespace>
     <NoWarn>CS0052;CS0246;CS7036;CS0108;CS0114;CS0649;CS0169;CS0165;CA1416;CS8019</NoWarn>
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
-    <NoStdLib>false</NoStdLib>
   </PropertyGroup>
+
+  <!--
+    El launcher original decompilado (248k lineas) no compila: la VM de ConfuserEx
+    (C834A786.cs y dependencias) esta entrelazada con ~80 archivos obfuscados.
+    En vez de intentar reparar 2200 referencias rotas, este proyecto usa un launcher
+    LIMPIO reconstruido a mano que:
+
+      - Mantiene la misma UI (18 controles: checkrainButt, topImage, plugImage,
+        iphoneImage, logoImage, progress, activate, model, ios, sn, service, imei,
+        qrImage, scanText, iphoneImage_Copy, erase, +2 botones)
+      - Mantiene el contrato P/Invoke con iremovalpro.dll (Library.cs: SetCallbacks,
+        SetWinInfo, Action)
+      - Los handlers conocidos llaman a Library.Action(5/6/9) igual que el original
+        (recoverado de los closures _003CSn_MouseDown_003Ed__16,
+        _003CImei_MouseDown_003Ed__17, _003CButton_Click_5_003Ed__21)
+      - El resto de handlers son stubs que logan a consola
+
+    El codigo decompilado original se preserva en _original-decompiled/ como
+    referencia, pero NO se compila.
+  -->
+
+  <ItemGroup>
+    <!-- Excluir TODOS los .cs del compile por default -->
+    <Compile Remove="**/*.cs" />
+
+    <!-- Incluir SOLO los archivos limpios -->
+    <Compile Include="App.xaml.cs" />
+    <Compile Include="MainWindow.xaml.cs" />
+    <Compile Include="Library.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="System.Management" Version="8.0.0" />
-  </ItemGroup>
-
-  <!--
-    Excluir la VM de ConfuserEx (C834A786.cs, ~250k lineas) del build.
-    El decompilador no pudo resolver las referencias internas del despachador
-    _3CB74B1B(args, magicNumber), por lo que compilarla genera ~2200 errores.
-    Sin esta VM, los handlers de UI quedan como cuerpos vacios — la GUI abre
-    pero los botones no responden. Para recuperar la VM hace falta dump
-    dinamico del proceso original en Windows (ClrMD/x64dbg). Ver docs/BUILD-WINDOWS.md.
-  -->
-  <ItemGroup>
-    <Compile Remove="C834A786.cs" />
-    <None Include="C834A786.cs" />
   </ItemGroup>
 
 </Project>
