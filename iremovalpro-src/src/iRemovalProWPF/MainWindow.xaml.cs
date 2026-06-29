@@ -29,40 +29,61 @@ namespace iRemovalProWPF
 
         public MainWindow()
         {
+            App.LogWrite("MainWindow: constructor start");
             InitializeComponent();
+            App.LogWrite("MainWindow: InitializeComponent done");
             Loaded += MainWindow_Loaded;
+            App.LogWrite("MainWindow: constructor end");
         }
 
         private static bool CheckEngineAvailable()
         {
             try
             {
-                System.Runtime.InteropServices.Marshal.PrelinkAll(typeof(Library));
+                var dllPath = System.IO.Path.Combine(AppContext.BaseDirectory, "iremovalpro.dll");
+                if (!System.IO.File.Exists(dllPath))
+                {
+                    App.LogWrite($"CheckEngineAvailable: DLL not found at {dllPath}");
+                    return false;
+                }
+                App.LogWrite($"CheckEngineAvailable: DLL found at {dllPath} ({new System.IO.FileInfo(dllPath).Length} bytes)");
                 return true;
             }
-            catch
+            catch (Exception ex)
             {
+                App.LogWrite($"CheckEngineAvailable: exception {ex.Message}");
                 return false;
             }
         }
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
+            App.LogWrite($"MainWindow_Loaded: _engineAvailable={_engineAvailable}");
+
             if (!_engineAvailable)
             {
                 UpdateStatus("iremovalpro.dll no encontrada. Copia el DLL original (33 MB) al lado del .exe.");
+                App.LogWrite("MainWindow_Loaded: engine not available, status updated, returning");
                 return;
             }
 
             try
             {
+                App.LogWrite("MainWindow_Loaded: creating FormCallback delegate");
                 _callback = new Library.FormCallback(OnEngineCallback);
+                App.LogWrite("MainWindow_Loaded: calling SetCallbacks");
                 Library.SetCallbacks(_callback);
+                App.LogWrite("MainWindow_Loaded: SetCallbacks returned OK");
+                App.LogWrite("MainWindow_Loaded: calling SetWinInfo");
                 Library.SetWinInfo("iRemoval PRO Premium", "5.2.1", "Blackhound 0.7.1", "@2022");
+                App.LogWrite("MainWindow_Loaded: SetWinInfo returned OK");
                 UpdateStatus("Listo. Conecta un iPhone y presiona checkra1n.");
+                App.LogWrite("MainWindow_Loaded: complete");
             }
             catch (Exception ex)
             {
+                App.LogWrite($"MainWindow_Loaded: EXCEPTION {ex.GetType().Name}: {ex.Message}");
+                App.LogWrite(ex.StackTrace);
                 UpdateStatus($"Error al inicializar engine: {ex.Message}");
             }
         }
