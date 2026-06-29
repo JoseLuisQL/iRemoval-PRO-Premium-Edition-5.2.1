@@ -56,4 +56,3 @@ namespace iRemovalProWPF
         public static extern void Action(int action);
     }
 }
-}
